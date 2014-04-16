@@ -1,13 +1,9 @@
-<% if session[:user_id] %>
-  <p>Hello, <%= email %> </p>
+<% if locals[:user] %>
+  <p>Hello, <%= user[:email] %> </p>
   <a href="/logout">Logout</a>
 <% else %>
   <p>Welcome!</p>
   <a href="/register">Register</a>
   <a href="/login">Login</a>
 <% end %>
-
-
-
-
 

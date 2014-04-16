@@ -16,34 +16,27 @@ class Application < Sinatra::Application
 
   user_table = DB[:users]
 
-
   get '/' do
-    if session[:user_id]
-      id = session[:user_id]
-      email = user_table[:id => id][:email]
-      erb :index, :locals => {:email => email}
-    else
-      erb :index
-    end
+    erb :index
   end
 
   get '/register' do
     erb :register
   end
 
-  post '/' do
-    id = user_table.insert(:email => params[:Email], :password => params[:Password])
-    session[:user_id] = id
-
-    redirect '/'
+  get '/login' do
+    erb :login
   end
 
-  #get '/logout' do
-  #  session[:user_id]
-  #  id = session[:user_id]
-  #  email = user_table[:id => id][:email]
-  #  erb :index, :locals => {:email => email}
-  #end
+  post '/' do
+    user_table.insert(:email => params[:Email])
+    user = user_table.filter(:email => params[:Email]).first
+    if user
+      erb :index, :locals => {:user => user}
+    else
+      erb :index
+    end
+  end
 
   get '/logout' do
     session[:user_id] = false

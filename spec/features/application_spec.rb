@@ -19,5 +19,6 @@ feature 'Homepage' do
     expect(page).to have_content 'Hello, joe@example.com'
     click_on 'Logout'
     expect(page).to have_content 'Welcome!'
+    click_on 'Login'
   end
 end
