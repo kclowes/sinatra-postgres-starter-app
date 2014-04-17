@@ -131,13 +131,4 @@ feature 'Homepage' do
     visit '/users'
     expect(page).to have_content 'Not Authorized'
   end
-
-  scenario 'User attempts to login with blank email' do
-    visit '/'
-    click_on 'Login'
-    fill_in 'Email', :with => '    '
-    fill_in 'Password', :with => 'password'
-    click_on 'Login'
-    expect(page).to have_content 'Email cannot be blank'
-  end
 end
