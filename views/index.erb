@@ -1,10 +1,14 @@
-<% if logged_in %>
-  <p>Hello, <%= email %> </p>
-  <a href="/logout">Logout</a>
-<% else %>
+<% if user.nil? %>
   <p>Welcome!</p>
   <a href="/register">Register</a>
   <a href="/login">Login</a>
-  <p><%= error %></p>
+<% elsif user[:admin] %>
+  <p>Welcome Admin</p>
+  <a href="/logout">Logout</a>
+  <a href="/users">Users</a>
+
+<% else %>
+  <p>Hello, <%= user[:email] %></p>
+  <a href="/logout">Logout</a>
 <% end %>
 

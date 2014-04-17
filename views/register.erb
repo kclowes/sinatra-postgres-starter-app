@@ -1,7 +1,10 @@
 <link href='http://fonts.googleapis.com/css?family=Sniglet' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="css/application.css">
 <h3 class="title">Register</h3>
-<form method="post" action="/">
+<% if need_error %>
+  <%= error %>
+<% end %>
+<form method="post" action="/register">
   <table>
     <tr>
       <td class="column2">Email</td>
@@ -12,6 +15,10 @@
     <tr>
       <td class="column2">Password</td>
       <td><input class="column1" type="password" name="Password"></td>
+    </tr>
+    <tr>
+      <td class="column2">Password Confirmation</td>
+      <td><input class="column1" type="password" name="Password_confirmation"></td>
     </tr>
     <tr>
       <td class="column2"></td>
