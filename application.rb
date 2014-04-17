@@ -17,7 +17,14 @@ class Application < Sinatra::Application
   user_table = DB[:users]
 
   get '/' do
-    erb :index
+    error = nil
+    user_id = session[:id]
+    if user_id.nil?
+      erb :index, :locals => {:logged_in => false, :error => error}
+    else
+      email = user_table[:id => user_id][:email]
+      erb :index, :locals => {:logged_in => true, :email => email, :error => error}
+    end
   end
 
   get '/register' do
@@ -25,22 +32,33 @@ class Application < Sinatra::Application
   end
 
   get '/login' do
-    erb :login
+    erb :login, locals: {need_error: false}
   end
 
   post '/' do
-    user_table.insert(:email => params[:Email])
-    user = user_table.filter(:email => params[:Email]).first
-    if user
-      erb :index, :locals => {:user => user}
+    id = user_table.insert(:email => params[:Email], :password => params[:Password])
+    session[:id] = id
+    redirect '/'
+  end
+
+  post '/login' do
+    does_email_exist =  user_table[:email => params[:Email]]
+    does_password_match = user_table[:password => params[:Password]]
+    if does_email_exist && does_password_match
+      error = nil
+      erb :index, :locals => {:logged_in => true, :error => error, :email => params[:Email]}
+    elsif does_email_exist == ''
+      error = "You have not entered a valid email or password"
+      erb :login, :locals => {:need_error => true, error: error}
     else
-      erb :index
+      error = "You have not entered a valid email or password"
+      erb :login, :locals => {:need_error => true, error: error}
     end
   end
 
   get '/logout' do
-    session[:user_id] = false
-    redirect '/'
+    error = nil
+    erb :index, :locals => {:logged_in => false, :error => error}
   end
 
 end
